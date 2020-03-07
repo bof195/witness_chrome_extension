@@ -1,40 +1,68 @@
+/* This Program populates an array with the SHA256 hash value
+ * of the image data of all images on a webpage.
+ * Created by Ben Thomas 
+ */ 
 
-//issue pull req 
-// new directory in exsisting repo for my code
-// calcualte hash of images in esxtentio jsut jpg sha 256
-// adress images that are data
+ //wait for user to initiate the witnessing process
 chrome.runtime.onMessage.addListener(function (request) {
     var images = document.getElementsByTagName('img'); 
 
-// https://stackoverflow.com/questions/9321863/javascript-function-to-get-all-images-in-html
-var srcList = [];
-for(var i = 0; i < images.length; i++) {
-    srcList.push(images[i].src);
-}
-console.log(srcList);
-//hashImageArray(srcList);
-let hashList = [];
-for (let i = 0; i < srcList.length;i++){
-    if (isUrl(srcList[i])){  
-        downloadImageFromUrl(srcList[i]).then(dowloadSuccess, console.error)
+    console.log("Witnessing Page ٩(๏_๏)۶");
+
+    // pushing the sources of all image on the webpage to srcList
+    // https://stackoverflow.com/questions/9321863/javascript-function-to-get-all-images-in-html
+    var srcList = [];
+    for(var i = 0; i < images.length; i++) {
+        srcList.push(images[i].src);
     }
-    else{
-        hashList.push(SHA256(srcList[i]));
+    console.log(srcList);
+
+    // Dowload and hash images in srcList, then push their
+    // hash value to hashList
+    let hashList = [];
+    for (let i = 0; i < srcList.length;i++){
+        if (isUrl(srcList[i])){  
+            downloadImageFromUrl(srcList[i]).then(dowloadSuccess, console.error)
+        }
+        else{
+            hashList.push(SHA256(srcList[i]));
+        }
     }
-}
+    // Wait 2 seconds for asyncrounous dowloads to finish and fully
+    // populate hashList before reporting data about the number of images
+    // that were witnessed 
+    sleep(2000)
 
-alert("You witnessed " + srcList.length + " images");
+    /* Hashes the data returned by a succesful image dowload.
+    * Called when a promise object from the 'downloadImageFromUrl' function
+    * is resolved asyncronously. 
+    */
+    function dowloadSuccess(response){
+        let srcHash = SHA256(response);
+        hashList.push(srcHash);
+    }
 
+    /* Helper function for sleep() that creates a promise object
+     */
+    function wait(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
 
-function dowloadSuccess(response){
-    let srcHash = SHA256(response);
-    hashList.push(srcHash);
-}
-console.log(hashList);
+    /* sleeps for time ms in miliseconds, then notifies the user of 
+     * the amout of images that were successfuly dowloaded and hashed.
+     */
+    async function sleep(ms){
+        await wait(ms);
+        console.log(hashList);
+        alert("You witnessed " + hashList.length + " images");
+    }
+//close addListener function 
 })
-/*https://stackoverflow.com/questions/20035615/using-raw-image-data-from-ajax-request-for-data-uri/49467592
-* By icl7123
-*/
+
+/* Asynconously dowloads image data of any file type from an image URL
+ * https://stackoverflow.com/questions/20035615/using-raw-image-data-from-ajax-request-for-data-uri/49467592
+ * By icl7123
+ */
 async function downloadImageFromUrl(url) {    // returns dataURL
     const xmlHTTP = new XMLHttpRequest();
     xmlHTTP.open('GET', url, true);
@@ -53,16 +81,8 @@ async function downloadImageFromUrl(url) {    // returns dataURL
     reader.readAsDataURL(blob);
   })}
 
-/* calculates the SHA256 hash value of an image's data uri
- */
-function hashImage(dataURI){
-    for (let i = 0; i < array.length;i++){
-        var imageHash = SHA256(dataURI);
-        //console.log(imageHash);
-    }
-}
 
-/* Returns true if the image source is a URL
+/* Returns true if the image source is a URL, false if it is image data
  */
 function isUrl(imgSrc){
     if (imgSrc.startsWith("http")){
@@ -74,13 +94,10 @@ function isUrl(imgSrc){
 }
 
 
-
-
-/**
-*  Secure Hash Algorithm (SHA256)
-*  http://www.webtoolkit.info/
-*  Original code by Angel Marin, Paul Johnston.
-**/
+/*  Secure Hash Algorithm (SHA256)
+ *  http://www.webtoolkit.info/
+ *  Original code by Angel Marin, Paul Johnston.
+ */
 function SHA256(s){
     var chrsz   = 8;
     var hexcase = 0;

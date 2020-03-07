@@ -11,7 +11,7 @@
 ],
 "browser_action": {
   "default_popup": "popup.html",
-  "default_title": "Witness This Media"
+  "default_title": "Click To Witness This Page"
 },
 "permissions": [
   "notifications",
