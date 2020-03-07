@@ -1,64 +1,86 @@
-chrome.runtime.onMessage.addListener(function (request) {
-    var images = document.getElementsByTagName('img'); 
-
-var srcList = [];
-for(var i = 0; i < images.length; i++) {
-    srcList.push(images[i].src);
-}
-console.log(srcList);
-hashImageArray(srcList);
-
-
-
-
-
-
-alert("You witnessed " + srcList.length + " images");
-})
-//alert("here we go");
-//var x = SHA256("whoooop");
-//console.log(x);
-
-
-
-
-
-
-
-// https://stackoverflow.com/questions/9321863/javascript-function-to-get-all-images-in-html
 
 //issue pull req 
 // new directory in exsisting repo for my code
 // calcualte hash of images in esxtentio jsut jpg sha 256
 // adress images that are data
+chrome.runtime.onMessage.addListener(function (request) {
+    var images = document.getElementsByTagName('img'); 
 
-function hashImageArray(array){
-    for (let i = 0; i < array.length;i++){
-        var imageHash = SHA256(array[i]);
-        console.log(imageHash);
-        // var xhr = new XMLHttpRequest();
-        // xhr.open('GET', array[i], true);
-        // xhr.responseType = 'arraybuffer'; // this will accept the response as an ArrayBuffer
-        // xhr.onload = function(buffer) {
-        //     var words = new Uint32Array(buffer),
-        //         hex = '';
-        //     for (var i = 0; i < words.length; i++) {
-        //         hex += words.get(i).toString(16);  // this will convert it to a 4byte hex string
-        //     }
-        //     alert(hex);
-        //     console.log(hex);
-        // };
-        // xhr.send();
+// https://stackoverflow.com/questions/9321863/javascript-function-to-get-all-images-in-html
+var srcList = [];
+for(var i = 0; i < images.length; i++) {
+    srcList.push(images[i].src);
+}
+console.log(srcList);
+//hashImageArray(srcList);
+let hashList = [];
+for (let i = 0; i < srcList.length;i++){
+    if (isUrl(srcList[i])){  
+        downloadImageFromUrl(srcList[i]).then(dowloadSuccess, console.error)
+    }
+    else{
+        hashList.push(SHA256(srcList[i]));
     }
 }
+
+alert("You witnessed " + srcList.length + " images");
+
+
+function dowloadSuccess(response){
+    let srcHash = SHA256(response);
+    hashList.push(srcHash);
+}
+console.log(hashList);
+})
+/*https://stackoverflow.com/questions/20035615/using-raw-image-data-from-ajax-request-for-data-uri/49467592
+* By icl7123
+*/
+async function downloadImageFromUrl(url) {    // returns dataURL
+    const xmlHTTP = new XMLHttpRequest();
+    xmlHTTP.open('GET', url, true);
+    xmlHTTP.responseType = 'blob';
+    const imageBlob = await new Promise((resolve, reject) => {
+      xmlHTTP.onload = e => xmlHTTP.status >= 200 && xmlHTTP.status < 300 && xmlHTTP.response.type.startsWith('image/') ? resolve(xmlHTTP.response) : reject(Error(`wrong status or type: ${xmlHTTP.status}/${xmlHTTP.response.type}`));
+      xmlHTTP.onerror = reject;
+      xmlHTTP.send();
+    });
+    return blobToDataUrl(imageBlob);
+  }
+  
+  function blobToDataUrl(blob) { return new Promise(resolve => {
+    const reader = new FileReader();    // https://developer.mozilla.org/en-US/docs/Using_files_from_web_applications
+    reader.onload = e => resolve(e.target.result);
+    reader.readAsDataURL(blob);
+  })}
+
+/* calculates the SHA256 hash value of an image's data uri
+ */
+function hashImage(dataURI){
+    for (let i = 0; i < array.length;i++){
+        var imageHash = SHA256(dataURI);
+        //console.log(imageHash);
+    }
+}
+
+/* Returns true if the image source is a URL
+ */
+function isUrl(imgSrc){
+    if (imgSrc.startsWith("http")){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+
+
 
 /**
 *  Secure Hash Algorithm (SHA256)
 *  http://www.webtoolkit.info/
 *  Original code by Angel Marin, Paul Johnston.
 **/
-
-
 function SHA256(s){
     var chrsz   = 8;
     var hexcase = 0;
