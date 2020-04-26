@@ -1,11 +1,19 @@
 /* This Program populates an array with the SHA256 hash value
- * of the image data of all images on a webpage.
+ * of the image data of all images on a webpage, then sends the hash values to
+ * an arbitary back end server.
  * Created by Ben Thomas 
  */ 
 
+ // XML POST requests sent to this location
+ const BACKEND_URL = "https://reqres.in/api/users";
+
+
  //wait for user to initiate the witnessing process
 chrome.runtime.onMessage.addListener(function (request) {
-    var images = document.getElementsByTagName('img'); 
+    var images = document.getElementsByTagName('img');
+
+    //store wepage url 
+    var pageURL = window.location.href
 
     console.log("Witnessing Page ٩(๏_๏)۶");
 
@@ -20,19 +28,23 @@ chrome.runtime.onMessage.addListener(function (request) {
     // Dowload and hash images in srcList, then push their
     // hash value to hashList
     let hashList = [];
+    
     for (let i = 0; i < srcList.length;i++){
         if (isUrl(srcList[i])){  
             downloadImageFromUrl(srcList[i]).then(dowloadSuccess, console.error)
         }
         else{
-            hashList.push(SHA256(srcList[i]));
+            var srcHash = SHA256(srcList[i]);
+            hashList.push(srcHash);
+            sendHashData(srcHash);
         }
     }
     // Wait 2 seconds for asyncrounous dowloads to finish and fully
     // populate hashList before reporting data about the number of images
     // that were witnessed 
-    sleep(2000)
 
+    sleep(2000)
+    
     /* Hashes the data returned by a succesful image dowload.
     * Called when a promise object from the 'downloadImageFromUrl' function
     * is resolved asyncronously. 
@@ -40,6 +52,7 @@ chrome.runtime.onMessage.addListener(function (request) {
     function dowloadSuccess(response){
         let srcHash = SHA256(response);
         hashList.push(srcHash);
+        sendHashData(srcHash);
     }
 
     /* Helper function for sleep() that creates a promise object
@@ -56,7 +69,22 @@ chrome.runtime.onMessage.addListener(function (request) {
         console.log(hashList);
         alert("You witnessed " + hashList.length + " images");
     }
-//close addListener function 
+    
+    /* Send the hash value of an image and the weppage url it was witness at to a backend using
+     * an XML POST request.
+     * hashValue is a SHA256 hash value of an image's data
+     */
+    function sendHashData(hashValue){
+        var xml = new XMLHttpRequest();
+        xml.open("POST", BACKEND_URL, true);
+        xml.setRequestHeader("Content-type", "application/json;charset=UTF-8");
+        xml.onreadystatechange = function(){
+            if(http.readyState == 4){
+                console.log(JSON.parse(xml.response));
+            }
+        };
+        xml.send(JSON.stringify({ "pageURL": pageURL, "imageHash": hashValue }));
+    }
 })
 
 /* Asynconously dowloads image data of any file type from an image URL
