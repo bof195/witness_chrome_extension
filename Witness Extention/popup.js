@@ -13,14 +13,3 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 }, false)
 
-//        ToDo 
-//issue pull req 
-// new directory in exsisting repo for my code
-// calcualte hash of images in esxtentio jsut jpg sha 256
-// adress images that are data
-
-/*     Questions
-what additional info should image hashes be sent with?
-user interface preferences?
-should the hash include the overhead of data url's
-*/

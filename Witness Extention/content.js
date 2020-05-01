@@ -7,6 +7,8 @@
  // XML POST requests sent to this location
  const BACKEND_URL = "https://reqres.in/api/users";
 
+ // Set to false to stop console output
+ var debug = true;
 
  //wait for user to initiate the witnessing process
 chrome.runtime.onMessage.addListener(function (request) {
@@ -23,7 +25,9 @@ chrome.runtime.onMessage.addListener(function (request) {
     for(var i = 0; i < images.length; i++) {
         srcList.push(images[i].src);
     }
-    console.log(srcList);
+    if(debug){
+        console.log(srcList);
+    }
 
     // Dowload and hash images in srcList, then push their
     // hash value to hashList
@@ -66,11 +70,13 @@ chrome.runtime.onMessage.addListener(function (request) {
      */
     async function sleep(ms){
         await wait(ms);
-        console.log(hashList);
+        if(debug){
+            console.log(hashList);
+        }
         alert("You witnessed " + hashList.length + " images");
     }
     
-    /* Send the hash value of an image and the weppage url it was witness at to a backend using
+    /* Send the hash value of an image, its webpage url, and date/time it was witness to a backend using
      * an XML POST request.
      * hashValue is a SHA256 hash value of an image's data
      */
@@ -79,11 +85,14 @@ chrome.runtime.onMessage.addListener(function (request) {
         xml.open("POST", BACKEND_URL, true);
         xml.setRequestHeader("Content-type", "application/json;charset=UTF-8");
         xml.onreadystatechange = function(){
-            if(http.readyState == 4){
-                console.log(JSON.parse(xml.response));
+            if(xml.readyState == 4){
+                if(debug){
+                    console.log(JSON.parse(xml.response));
+                }
             }
         };
-        xml.send(JSON.stringify({ "pageURL": pageURL, "imageHash": hashValue }));
+        var time = new Date();
+        xml.send(JSON.stringify({ "pageURL": pageURL, "imageHash": hashValue, "When Witnessed": time }));
     }
 })
 
