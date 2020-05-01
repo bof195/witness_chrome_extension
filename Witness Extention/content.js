@@ -8,7 +8,7 @@
  const BACKEND_URL = "https://reqres.in/api/users";
 
  // Set to false to stop console output
- var debug = true;
+ var debug = false;
 
  //wait for user to initiate the witnessing process
 chrome.runtime.onMessage.addListener(function (request) {
