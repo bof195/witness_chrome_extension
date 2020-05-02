@@ -2,7 +2,7 @@
  * hash value of those elements' raw data. Then each image hash, the url of the web page
  * it was viewed on, and the time it was witnessed are sent to a backend via XLM POST request. 
  * 
- * Created by Ben Thomas 
+ * Created by Ben Thomas during spring semester 2020
  *   If anyone decides to work on this extention further or a corresponding backend
  *   please feel free to reach out to me for help or with any questions! => bethomas@westmont.edu
  */ 
