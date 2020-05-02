@@ -1,10 +1,13 @@
-/* This Program populates an array with the SHA256 hash value
- * of the image data of all images on a webpage, then sends the hash values to
- * an arbitary back end server.
+/* This parses a web page html document for all img elements and calcualtes the SHA 256
+ * hash value of those elements' raw data. Then each image hash, the url of the web page
+ * it was viewed on, and the time it was witnessed are sent to a backend via XLM POST request. 
+ * 
  * Created by Ben Thomas 
+ *   If anyone decides to work on this extention further or a corresponding backend
+ *   please feel free to reach out to me for help or with any questions! => bethomas@westmont.edu
  */ 
 
- // XML POST requests sent to this location
+ // XML POST requests sent to this url
  const BACKEND_URL = "https://reqres.in/api/users";
 
  // Set to false to stop console output
@@ -43,9 +46,10 @@ chrome.runtime.onMessage.addListener(function (request) {
             sendHashData(srcHash);
         }
     }
-    // Wait 2 seconds for asyncrounous dowloads to finish and fully
-    // populate hashList before reporting data about the number of images
-    // that were witnessed 
+    /* Wait 2 seconds for asyncrounous dowloads to finish and fully
+     * populate hashList before reporting data about the number of images
+     * that were witnessed 
+     */
 
     sleep(2000)
     
@@ -79,6 +83,12 @@ chrome.runtime.onMessage.addListener(function (request) {
     /* Send the hash value of an image, its webpage url, and date/time it was witness to a backend using
      * an XML POST request.
      * hashValue is a SHA256 hash value of an image's data
+     * 
+     *     {
+     *        pageUrl : the url of the webpage the image was viewed at 
+     *        imagehash : the SHA 256 hash value of the raw image data
+     *        When Witnessed : a stringified Date() object indicating when the image was witnessed
+     *     }
      */
     function sendHashData(hashValue){
         var xml = new XMLHttpRequest();
@@ -87,6 +97,7 @@ chrome.runtime.onMessage.addListener(function (request) {
         xml.onreadystatechange = function(){
             if(xml.readyState == 4){
                 if(debug){
+                    //log the server's response to the console
                     console.log(JSON.parse(xml.response));
                 }
             }
