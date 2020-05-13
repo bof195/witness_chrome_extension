@@ -1,11 +1,47 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-</head>
-<body>
-    <button id="witness">Witness This Page</button>
-    <script src="popup.js" charset="UTF-8"></script>
+	<head>
+    	<!-- Required meta tags -->
+    	<meta charset="utf-8">
+    	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-</body>
+    	<!-- Bootstrap CSS -->
+    	<link rel="stylesheet" href="lib/bootstrap.min.4.5.0.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+		
+    	<!-- Local CSS -->
+		<!-- ToDo add integrity to this asset -->
+    	<link rel="stylesheet" href="assets/css/witness.css">
+
+    	<title>Witness This Media Chrome Extension</title>
+	</head>
+
+	<body>
+		<div class="container">
+			<div class="d-flex flex-row justify-content-center align-items-center">
+				<div class="flex-column p-2">
+					<label class="switch">
+						<input type="checkbox">
+						<span class="slider round"></span>
+					</label>
+				</div>
+				<div class="flex-column">
+					<h4>On</h4>
+				</div>
+			</div>
+			<div class="d-flex flex-row justify-content-center align-items-center">
+				<div class="flex-column p-2">
+					<button type="button" class="btn btn-success" id="witness">Witness Now</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    	<script src="lib/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+		<script src="lib/popper.min.1.16.0.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+		<script src="lib/bootstrap.min.4.5.0.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+		
+		<!-- At the end so it has access to jquery -->
+		<script src="popup.js" charset="UTF-8"></script>
+
+	</body>
 </html>
