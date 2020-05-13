@@ -2,12 +2,11 @@
  * hash value of those elements' raw data. Then each image hash, the url of the web page
  * it was viewed on, and the time it was witnessed are sent to a backend via XLM POST request. 
  * 
- * Created by Ben Thomas during spring semester 2020
- *   If anyone decides to work on this extention further or a corresponding backend
- *   please feel free to reach out to me for help or with any questions! => bethomas@westmont.edu
+ * Modified by Don Patterson, github: @djp3
+ * First Draft by Ben Thomas during spring semester 2020 at Westmont College github:@bent44
  */ 
 
- // XML POST requests sent to this url
+ // XML POST requests sent to this url, this is a testing backend
  const BACKEND_URL = "https://reqres.in/api/users";
 
  // Set to false to stop console output
