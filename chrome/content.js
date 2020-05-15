@@ -1,3 +1,24 @@
+/*
+ * Copyright 2020 Don Patterson, github: @djp3 email: d_j_p_3 at djp3.net
+ *
+ *  This file is part of the Witness This Media Chrome Extension (WTMCE).
+
+    WTMCE is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    WTMCE is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with WTMCE.  If not, see <https://www.gnu.org/licenses/>.
+
+*/
+
+
 /* This parses a web page html document for all img elements and calcualtes the SHA 256
  * hash value of those elements' raw data. Then each image hash, the url of the web page
  * it was viewed on, and the time it was witnessed are sent to a backend via XLM POST request. 
