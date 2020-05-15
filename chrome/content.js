@@ -23,15 +23,33 @@
  * hash value of those elements' raw data. Then each image hash, the url of the web page
  * it was viewed on, and the time it was witnessed are sent to a backend via XLM POST request. 
  * 
- * Modified by Don Patterson, github: @djp3
- * First Draft by Ben Thomas during spring semester 2020 at Westmont College github:@bent44
  */ 
 
- // XML POST requests sent to this url, this is a testing backend
- const BACKEND_URL = "https://reqres.in/api/users";
 
- // Set to false to stop console output
- var debug = false;
+//Local Constant
+var CL_MESSAGE_PASSING_OK = true; //Assume okay in race condition with check
+
+
+/* Launched from bottom of script */
+function main(){
+	console.log("The Witness This Media Chrome Extension Copyright (C) 2020 Donald J. Patterson\n  This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you are welcome to redistribute it under certain conditions.  Contact the authors for details");
+
+	check_message_passing(function(ok){
+		CL_MESSAGE_PASSING_OK = ok;
+	});
+
+	if(C_DEBUG){
+		console.log("content.js main() finished")
+	}
+}
+
+
+$(window).on("load",function(){
+	if(C_DEBUG){
+		console.log("content.js script ran on load")
+	}
+})
+
 
  //wait for user to initiate the witnessing process
 chrome.runtime.onMessage.addListener(function (request) {
@@ -48,7 +66,7 @@ chrome.runtime.onMessage.addListener(function (request) {
     for(var i = 0; i < images.length; i++) {
         srcList.push(images[i].src);
     }
-    if(debug){
+    if(C_DEBUG){
         console.log(srcList);
     }
 
@@ -94,7 +112,7 @@ chrome.runtime.onMessage.addListener(function (request) {
      */
     async function sleep(ms){
         await wait(ms);
-        if(debug){
+        if(C_DEBUG){
             console.log(hashList);
         }
         alert("You witnessed " + hashList.length + " images");
@@ -116,7 +134,7 @@ chrome.runtime.onMessage.addListener(function (request) {
         xml.setRequestHeader("Content-type", "application/json;charset=UTF-8");
         xml.onreadystatechange = function(){
             if(xml.readyState == 4){
-                if(debug){
+                if(C_DEBUG){
                     //log the server's response to the console
                     console.log(JSON.parse(xml.response));
                 }
@@ -291,3 +309,6 @@ function SHA256(s){
     s = Utf8Encode(s);
     return binb2hex(core_sha256(str2binb(s), s.length * chrsz));
 }
+
+
+main()
