@@ -77,6 +77,14 @@ $(window).on("load",function(){
 		console.log("Message passing not okay")
 	}
 
+
+	//Tooltips
+	$('#'+K_AUTO_PROCESS+"_tooltip").attr('title',chrome.i18n.getMessage('ext_auto_tooltip'))
+	$('#'+K_AUTO_PROCESS+"_tooltip").tooltip()
+
+	$('#'+K_MANUAL_WITNESS).attr('title',chrome.i18n.getMessage('ext_manual_tooltip'))
+	$('#'+K_MANUAL_WITNESS).tooltip()
+
 	if(C_DEBUG){
 		console.log("popup.js script ran on load")
 	}
