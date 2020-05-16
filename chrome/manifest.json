@@ -27,14 +27,14 @@
 		"js": ["lib/jquery-3.5.1.slim.min.js",
 			"assets/js/constants.js",
 			"assets/js/utilities.js",
-			"content.js"
+			"assets/js/content.js"
 		]
 	}],
 	"background": {
 		"scripts": [
 					"lib/jquery-3.5.1.slim.min.js",
 					"assets/js/constants.js",
-					"background.js"
+					"assets/js/background.js"
 		]
 	},
 	"permissions": [
