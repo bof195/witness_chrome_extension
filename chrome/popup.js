@@ -25,12 +25,6 @@
  * Created by Ben Thomas
  * significantly influenced by: https://www.youtube.com/watch?v=Ipa58NVGs_c
  */
-function onclick () {
-	chrome.tabs.query({currentWindow: true, active: true},
-	function (tabs) {
-   		chrome.tabs.sendMessage(tabs[0].id, '')
-	})
-}
 
 //Local Constanct
 var CL_MESSAGE_PASSING_OK = true; // Assume it is working in race conditions with the check

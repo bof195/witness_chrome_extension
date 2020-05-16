@@ -19,6 +19,28 @@
 */
 
 
-body{
-	width:175px;
-}
+/* Constants used across all the extension javascript */
+
+// XML POST requests sent to this url, this is a testing backend
+const BACKEND_URL = "https://reqres.in/api/users";
+
+// Set to false to stop console output
+var C_DEBUG = true;
+var C_VERSION = "0.0.3"; // Should match manifest
+
+
+// Keys used for persistent storage
+var K_AUTO_PROCESS = 'auto_process'
+var K_MANUAL_WITNESS = 'manual_witness'
+
+//Message passing commands
+var M_VERSION = "version";
+var M_GET_AUTO_PROCESS = "get_"+K_AUTO_PROCESS;
+var M_SET_AUTO_PROCESS = "set_"+K_AUTO_PROCESS;
+
+//Standard Message passing responses
+var MR_WAIT = "wait";
+var MR_GOOD = "good";
+var MR_ERROR = "error";
+var MR_UNKNOWN_COMMAND = "unknown command";
+
