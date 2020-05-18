@@ -18,46 +18,6 @@
 
 */
 
-/**
- * This can be called from within the U/I or from with the content script
- */
-function update_K_AUTO_PROCESS(value){
-
-	// Resolve what the new setting should be between the parameter and the U/I.
-	//   The incoming parameter has priority
-	// Default is off
-	var new_value = 'off' //default
-	if($("#"+K_AUTO_PROCESS).prop('checked')){
-		new_value = 'on'
-	}
-
-	//If we have an input parameter and understand it,  then use it
-	if('undefined' != typeof value && value){
-		if (value == "on"){
-			new_value = "on"
-		} else if (value == "off"){
-			new_value = "off"
-		}
-	}
-	
-
-	//Store the value in local storage for persistence
-	if(CL_MESSAGE_PASSING_OK){
-
-		chrome.runtime.sendMessage({command: M_SET_AUTO_PROCESS,data:new_value}, function(response) {
-			if(!validate_response_ok(response)){
-				if(C_DEBUG){
-					console.log("Storage failed for new_value:"+new_value+":"+JSON.stringify(response));
-				}
-			}
-			//Nothing to do if everything goes right
-		});
-	}
-
-	return new_value;
-}
-
-
 
 /****************************/
 /* Help for message passing */

@@ -30,7 +30,7 @@
 var CL_MESSAGE_PASSING_OK = true; //Assume okay in race condition with check
 
 
-var monitoredImages = {}; //jQuery object : timer object
+var monitoredImages = new Object(); //jQuery object : timer object
 
 
 /* Launched from bottom of this script file */
@@ -67,26 +67,53 @@ $(window).on("load",function(){
 
 
 
-//Returns a function that watches images for being successfully loaded
-function watch(theImage,theTimer) {
-	return(function(){
-		if (theImage.complete) {
-   			clearInterval(theTimer);
-			//Do something with theImage
-			if(C_DEBUG){
-				console.log('Watching '+theImage.src);
-			}
-   		}
-   	});
-}
-
 function startMonitoringImage(theImage){
+	let theKey = theImage.src;
 	//Add image to monitoring dictionary with timer
-	if(!monitoredImages.hasOwnProperty(theImage)){
+	if(('undefined' == typeof monitoredImages[theKey]) || !monitoredImages[theKey]){
 		//pick an interval between .5 seconds and 5 seconds
 		//to avoid synchronization effects - heavy load etc.
-		let theTimer = Math.random()*4500 + 500;
-		let loadWatch = setInterval(watch(theImage,theTimer), theTimer);
+		let theTime = Math.random()*4500 + 500;
+		if(C_DEBUG){
+			theTime = 5000;
+		}
+		var loadWatch = setInterval(watch, theTime);
+		function watch() {
+			if (theImage.complete) {
+				stopMonitoringImage(theKey);
+				//Do something with loaded theImage
+				if(C_DEBUG){
+					console.log('Witnessing '+theImage.src);
+				}
+
+			}
+		}
+		console.log("Starting monitoring "+theKey+":"+JSON.stringify(loadWatch));
+		monitoredImages[theKey] = loadWatch;
+	}
+	else{
+		if(C_DEBUG){
+			console.log("monitoredImages already has that image:\n"+JSON.stringify(monitoredImages));
+		}
+	}
+}
+
+function stopMonitoringImage(theImageSrc){
+	let theKey = theImageSrc;
+	let theInterval = monitoredImages[theKey];
+	console.log("Stopping monitoring "+theKey+":"+JSON.stringify(theInterval));
+	if(!( 'undefined' == typeof theInterval) && theInterval){
+		clearInterval(theInterval);
+		monitoredImages[theKey] = null;
+	}
+}
+
+
+function stopMonitoringAllImages(){
+	for (key in monitoredImages) {
+		if(monitoredImages.hasOwnProperty(key)){
+			stopMonitoringImage(key)
+		}
 	}
 }
 
@@ -117,12 +144,16 @@ chrome.runtime.onMessage.addListener(
 				console.log("Content script received command \'"+request.command+"\' from "+sender.tab.url)
 			}
 			else{
-				console.log("Conten script received command \'"+request.command+"\' from the extension")
+				console.log("Content script received command \'"+request.command+"\' from the extension")
 			}
 		}
 		switch(request.command){
 			case M_MANUAL_WITNESS:
 				collect_images();
+				sendResponse({result: MR_GOOD});
+				break;
+			case M_STOP_WITNESS:
+				stopMonitoringAllImages();
 				sendResponse({result: MR_GOOD});
 				break;
 			default:
