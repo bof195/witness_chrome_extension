@@ -30,7 +30,11 @@
 var CL_MESSAGE_PASSING_OK = true; //Assume okay in race condition with check
 
 
-/* Launched from bottom of script */
+var monitoredImages = {}; //jQuery object : timer object
+
+
+/* Launched from bottom of this script file */
+
 function main(){
 	console.log("The Witness This Media Chrome Extension Copyright (C) 2020 Donald J. Patterson\n  This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you are welcome to redistribute it under certain conditions.  Contact the authors for details");
 
@@ -48,28 +52,93 @@ $(window).on("load",function(){
 	if(C_DEBUG){
 		console.log("content.js script ran on load")
 	}
+	
+	//Activate automatic witnessing as appropriate
+	if(CL_MESSAGE_PASSING_OK){ 
+		chrome.runtime.sendMessage({command: M_GET_AUTO_PROCESS}, function(response) {
+			if(validate_response_ok(response)){
+				if(response.result == 'on'){
+					collect_images();
+				}
+			}
+		});
+	}
 })
 
 
- //wait for user to initiate the witnessing process
-chrome.runtime.onMessage.addListener(function (request) {
-    var images = document.getElementsByTagName('img');
 
-    //store wepage url 
-    var pageURL = window.location.href
+//Returns a function that watches images for being successfully loaded
+function watch(theImage,theTimer) {
+	return(function(){
+		if (theImage.complete) {
+   			clearInterval(theTimer);
+			//Do something with theImage
+			if(C_DEBUG){
+				console.log('Watching '+theImage.src);
+			}
+   		}
+   	});
+}
 
-    console.log("Witnessing Page ٩(๏_๏)۶");
+function startMonitoringImage(theImage){
+	//Add image to monitoring dictionary with timer
+	if(!monitoredImages.hasOwnProperty(theImage)){
+		//pick an interval between .5 seconds and 5 seconds
+		//to avoid synchronization effects - heavy load etc.
+		let theTimer = Math.random()*4500 + 500;
+		let loadWatch = setInterval(watch(theImage,theTimer), theTimer);
+	}
+}
 
-    // pushing the sources of all image on the webpage to srcList
-    // https://stackoverflow.com/questions/9321863/javascript-function-to-get-all-images-in-html
-    var srcList = [];
-    for(var i = 0; i < images.length; i++) {
-        srcList.push(images[i].src);
-    }
-    if(C_DEBUG){
-        console.log(srcList);
-    }
 
+/*
+ * Finds all the images on the page and begins monitoring them for 
+ * return: Array of all non-empty image sources
+ */
+function collect_images() {
+	//Set up for dynamic images
+	$(document).on("load","img",startMonitoringImage);
+	//Process current images in document
+	$('img').each(function(index,value){
+		startMonitoringImage(value);
+		return true; //keep iterating
+	});
+}
+
+
+
+//Wait for a manual initiation of the witnessing process
+chrome.runtime.onMessage.addListener(
+	function (request,sender,sendResponse) {
+		var wait = false;
+
+		if(C_DEBUG){
+			if(sender.tab){
+				console.log("Content script received command \'"+request.command+"\' from "+sender.tab.url)
+			}
+			else{
+				console.log("Conten script received command \'"+request.command+"\' from the extension")
+			}
+		}
+		switch(request.command){
+			case M_MANUAL_WITNESS:
+				collect_images();
+				sendResponse({result: MR_GOOD});
+				break;
+			default:
+				sendResponse({result: MR_UNKNOWN_COMMAND});
+				break;
+		}
+		if(C_DEBUG){
+			console.log("content.js processed command \'"+request.command+"("+request.data+")\'");
+		}
+		return wait;
+	}
+);
+
+		
+
+function leftovercode(){
     // Dowload and hash images in srcList, then push their
     // hash value to hashList
     let hashList = [];
@@ -143,7 +212,7 @@ chrome.runtime.onMessage.addListener(function (request) {
         var time = new Date();
         xml.send(JSON.stringify({ "pageURL": pageURL, "imageHash": hashValue, "When Witnessed": time }));
     }
-})
+}
 
 /* Asynconously dowloads image data of any file type from an image URL
  * https://stackoverflow.com/questions/20035615/using-raw-image-data-from-ajax-request-for-data-uri/49467592

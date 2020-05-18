@@ -34,9 +34,10 @@ var K_AUTO_PROCESS = 'auto_process'
 var K_MANUAL_WITNESS = 'manual_witness'
 
 //Message passing commands
-var M_VERSION = "version";
-var M_GET_AUTO_PROCESS = "get_"+K_AUTO_PROCESS;
-var M_SET_AUTO_PROCESS = "set_"+K_AUTO_PROCESS;
+var M_VERSION = "method_version";
+var M_GET_AUTO_PROCESS = "method_get_"+K_AUTO_PROCESS;
+var M_SET_AUTO_PROCESS = "method_set_"+K_AUTO_PROCESS;
+var M_MANUAL_WITNESS = "method_"+K_MANUAL_WITNESS;
 
 //Standard Message passing responses
 var MR_WAIT = "wait";

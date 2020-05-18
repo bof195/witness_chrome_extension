@@ -26,7 +26,7 @@
  * significantly influenced by: https://www.youtube.com/watch?v=Ipa58NVGs_c
  */
 
-//Local Constanct
+//Local Constant
 var CL_MESSAGE_PASSING_OK = true; // Assume it is working in race conditions with the check
 
 
@@ -43,7 +43,7 @@ function main(){
 
 $(window).on("load",function(){
 	//Attach action to manual button
-	$('button').click(onclick)
+	$('#manual_button').click(manualButtonClick)
 
 	// Build slider for K_AUTO_PROCESS
 	$('#'+K_AUTO_PROCESS).attr('data-toggle','toggle')
@@ -83,18 +83,23 @@ $(window).on("load",function(){
 		console.log("popup.js script ran on load")
 	}
 });
-/*
-document.addEventListener('DOMContentLoaded', function () {
-   document.querySelector('button').addEventListener('click', onclick, false)
 
-    function onclick () {
-        chrome.tabs.query({currentWindow: true, active: true},
-        function (tabs) {
-            chrome.tabs.sendMessage(tabs[0].id, '')
-        })
-    }
-}, false)
-*/
+
+
+function manualButtonClick () {
+	chrome.tabs.query({active:true, currentWindow: true},
+		function (tabs) {
+			chrome.tabs.sendMessage(tabs[0].id, {command:M_MANUAL_WITNESS},
+				function(response) {
+					if(C_DEBUG){
+						console.log("manual witness response:"+response.result);
+					}
+				}
+			)
+		}
+	)
+}
+
 
 
 main()

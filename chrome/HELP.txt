@@ -1,3 +1,5 @@
-
 Helpful tutorial for extensions
-https://itnext.io/all-youll-ever-need-to-know-about-chrome-extensions-ceede9c28836
+	https://itnext.io/all-youll-ever-need-to-know-about-chrome-extensions-ceede9c28836
+
+Guidance on message passing: 
+	https://developer.chrome.com/extensions/messaging#content-scripts-are-less-trustworthy

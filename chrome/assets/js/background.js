@@ -90,8 +90,6 @@ chrome.storage.local.get([K_AUTO_PROCESS],function(result){
 
 
 
-// guidance on message passing: 
-// 		https://developer.chrome.com/extensions/messaging#content-scripts-are-less-trustworthy
 chrome.runtime.onMessage.addListener(
 	function(request, sender, sendResponse) {
 		var wait = false;
