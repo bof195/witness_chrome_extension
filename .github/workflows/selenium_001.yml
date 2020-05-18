@@ -1,4 +1,4 @@
-name: CI
+name: SELENIUM_001 
 on:
   push:
     branches:
