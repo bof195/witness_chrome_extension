@@ -38,6 +38,7 @@ var M_VERSION = "method_version";
 var M_GET_AUTO_PROCESS = "method_get_"+K_AUTO_PROCESS;
 var M_SET_AUTO_PROCESS = "method_set_"+K_AUTO_PROCESS;
 var M_MANUAL_WITNESS = "method_"+K_MANUAL_WITNESS;
+var M_STOP_WITNESS = "method_stop_witnessing";
 
 //Standard Message passing responses
 var MR_WAIT = "wait";

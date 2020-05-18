@@ -41,9 +41,90 @@ function main(){
 }
 
 
+function update_K_AUTO_PROCESS(value){
+
+	// Resolve what the new setting should be between the parameter and the U/I.
+	// The incoming parameter has priority
+	// Default is off
+	var new_value = 'off' //default
+	if($("#"+K_AUTO_PROCESS).prop('checked')){
+		new_value = 'on'
+	}
+
+	//If we have an input parameter and understand it,  then use it
+	if('undefined' != typeof value && value){
+		if (value == "on"){
+			new_value = "on"
+		} else if (value == "off"){
+			new_value = "off"
+		}
+	}
+	
+
+	//Store the value in local storage for persistence
+	if(CL_MESSAGE_PASSING_OK){
+
+		chrome.runtime.sendMessage({command: M_SET_AUTO_PROCESS,data:new_value}, function(response) {
+			if(!validate_response_ok(response)){
+				if(C_DEBUG){
+					console.log("Storage failed for new_value:"+new_value+":"+JSON.stringify(response));
+				}
+			}
+			//Nothing to do if everything goes right
+		});
+	}
+
+
+	//If the new_value is on, then make sure it starts a witness process
+	if(new_value == 'on'){
+		manualWitnessStart();
+	}
+	else if (new_value == 'off'){
+		manualWitnessStop();
+	}
+	
+
+	return new_value;
+}
+
+
+
+
+function manualWitnessStart () {
+	chrome.tabs.query({active:true, currentWindow: true},
+		function (tabs) {
+			chrome.tabs.sendMessage(tabs[0].id, {command:M_MANUAL_WITNESS},
+				function(response) {
+					if(C_DEBUG){
+						console.log("manual witness start result:"+response.result);
+					}
+				}
+			)
+		}
+	)
+}
+
+
+function manualWitnessStop () {
+	chrome.tabs.query({active:true, currentWindow: true},
+		function (tabs) {
+			chrome.tabs.sendMessage(tabs[0].id, {command:M_STOP_WITNESS},
+				function(response) {
+					if(C_DEBUG){
+						console.log("manual witness stop result:"+response.result);
+					}
+				}
+			)
+		}
+	)
+}
+
+
+
+
 $(window).on("load",function(){
 	//Attach action to manual button
-	$('#manual_button').click(manualButtonClick)
+	$('#manual_button').click(manualWitnessStart)
 
 	// Build slider for K_AUTO_PROCESS
 	$('#'+K_AUTO_PROCESS).attr('data-toggle','toggle')
@@ -83,22 +164,6 @@ $(window).on("load",function(){
 		console.log("popup.js script ran on load")
 	}
 });
-
-
-
-function manualButtonClick () {
-	chrome.tabs.query({active:true, currentWindow: true},
-		function (tabs) {
-			chrome.tabs.sendMessage(tabs[0].id, {command:M_MANUAL_WITNESS},
-				function(response) {
-					if(C_DEBUG){
-						console.log("manual witness response:"+response.result);
-					}
-				}
-			)
-		}
-	)
-}
 
 
 
