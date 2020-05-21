@@ -56,6 +56,7 @@ async function boot() {
 	browser = await puppeteer.launch({
 		headless: false, // extension are allowed only in head-full mode
 		args: [
+			`--no-sandbox`,
 			`--disable-extensions-except=${extensionPath}`,
 			`--load-extension=${extensionPath}`
 		]
