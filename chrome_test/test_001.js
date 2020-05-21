@@ -12,6 +12,7 @@ let browser = null;
 describe('Extension UI Testing', function() {
 	this.timeout(20000); // default is 2 seconds and that may not be enough to boot browsers and pages.
 	before(async function() {
+  		this.enableTimeouts(false) 
 		await boot();
 	});
 
