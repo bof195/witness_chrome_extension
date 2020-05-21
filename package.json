@@ -4,7 +4,7 @@
   "description": "Witness This Media Chrome Extension",
   "main": "lighthouserc.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha chrome_test/test_001.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,14 @@
   "bugs": {
     "url": "https://github.com/djp3/witness_chrome_extension/issues"
   },
-  "homepage": "https://github.com/djp3/witness_chrome_extension#readme"
+  "homepage": "https://github.com/djp3/witness_chrome_extension#readme",
+  "dependencies": {
+    "assert": "^2.0.0",
+    "bufferutil": "^4.0.1",
+    "puppeteer": "^3.1.0",
+    "utf-8-validate": "^5.0.2"
+  },
+  "devDependencies": {
+    "mocha": "^7.1.2"
+  }
 }

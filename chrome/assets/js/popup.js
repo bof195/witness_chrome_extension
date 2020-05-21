@@ -26,6 +26,8 @@
  * significantly influenced by: https://www.youtube.com/watch?v=Ipa58NVGs_c
  */
 
+const constants = require('../chrome/assets/js/constants.js');
+
 //Local Constant
 var CL_MESSAGE_PASSING_OK = true; // Assume it is working in race conditions with the check
 
@@ -41,13 +43,13 @@ function main(){
 }
 
 
-function update_K_AUTO_PROCESS(value){
+function update_K_AUTO_WITNESS(value){
 
 	// Resolve what the new setting should be between the parameter and the U/I.
 	// The incoming parameter has priority
 	// Default is off
 	var new_value = 'off' //default
-	if($("#"+K_AUTO_PROCESS).prop('checked')){
+	if($("#"+K_AUTO_WITNESS).prop('checked')){
 		new_value = 'on'
 	}
 
@@ -64,7 +66,7 @@ function update_K_AUTO_PROCESS(value){
 	//Store the value in local storage for persistence
 	if(CL_MESSAGE_PASSING_OK){
 
-		chrome.runtime.sendMessage({command: M_SET_AUTO_PROCESS,data:new_value}, function(response) {
+		chrome.runtime.sendMessage({command: M_SET_AUTO_WITNESS,data:new_value}, function(response) {
 			if(!validate_response_ok(response)){
 				if(C_DEBUG){
 					console.log("Storage failed for new_value:"+new_value+":"+JSON.stringify(response));
@@ -124,27 +126,27 @@ function manualWitnessStop () {
 
 $(window).on("load",function(){
 	//Attach action to manual button
-	$('#manual_button').click(manualWitnessStart)
+	$('#manual_process_button').click(manualWitnessStart)
 
-	// Build slider for K_AUTO_PROCESS
-	$('#'+K_AUTO_PROCESS).attr('data-toggle','toggle')
-	$('#'+K_AUTO_PROCESS).attr('data-onstyle','success')
-	$('#'+K_AUTO_PROCESS).attr('data-on','<i class="far fa-eye fa-lg"></i>')
-	$('#'+K_AUTO_PROCESS).attr('data-off','<i class="far fa-eye-slash fa-lg"></i>')
-	$('#'+K_AUTO_PROCESS).attr('data-offstyle','outline-danger')
-	$('#'+K_AUTO_PROCESS).bootstrapToggle('disable')
+	// Build slider for K_AUTO_WITNESS
+	$('#'+K_AUTO_WITNESS+C_SLIDER).attr('data-toggle','toggle')
+	$('#'+K_AUTO_WITNESS+C_SLIDER).attr('data-onstyle','success')
+	$('#'+K_AUTO_WITNESS+C_SLIDER).attr('data-on','<i class="far fa-eye fa-lg"></i>')
+	$('#'+K_AUTO_WITNESS+C_SLIDER).attr('data-off','<i class="far fa-eye-slash fa-lg"></i>')
+	$('#'+K_AUTO_WITNESS+C_SLIDER).attr('data-offstyle','outline-danger')
+	$('#'+K_AUTO_WITNESS+C_SLIDER).bootstrapToggle('disable')
 	//Initialize it to the stored value
 	if(CL_MESSAGE_PASSING_OK){
 		console.log("About to initialize slider")
-		chrome.runtime.sendMessage({command: M_GET_AUTO_PROCESS}, function(response) {
+		chrome.runtime.sendMessage({command: M_GET_AUTO_WITNESS}, function(response) {
 			console.log("Got a call back:"+JSON.stringify(response))
 			if(validate_response_ok(response)){
 				var new_value = response.result;
 				console.log("Got a call back that's ready: "+new_value);
-				$('#'+K_AUTO_PROCESS).bootstrapToggle('enable',false)
-				$('#'+K_AUTO_PROCESS).bootstrapToggle(new_value,false)
+				$('#'+K_AUTO_WITNESS+C_SLIDER).bootstrapToggle('enable',false)
+				$('#'+K_AUTO_WITNESS+C_SLIDER).bootstrapToggle(new_value,false)
 				//Register for new changes
-				$('#'+K_AUTO_PROCESS).change(update_K_AUTO_PROCESS)
+				$('#'+K_AUTO_WITNESS+C_SLIDER).change(update_K_AUTO_WITNESS)
 			}
 		});
 	}
@@ -154,11 +156,11 @@ $(window).on("load",function(){
 
 
 	//Tooltips
-	$('#'+K_AUTO_PROCESS+"_tooltip").attr('title',chrome.i18n.getMessage('ext_auto_tooltip'))
-	$('#'+K_AUTO_PROCESS+"_tooltip").tooltip()
+	$('#'+K_AUTO_WITNESS+C_SLIDER+C_TOOLTIP).attr('title',chrome.i18n.getMessage('ext_auto_tooltip'))
+	$('#'+K_AUTO_WITNESS+C_SLIDER+C_TOOLTIP).tooltip()
 
-	$('#'+K_MANUAL_WITNESS).attr('title',chrome.i18n.getMessage('ext_manual_tooltip'))
-	$('#'+K_MANUAL_WITNESS).tooltip()
+	$('#'+K_MANUAL_WITNESS_C_BUTTON_C_TOOLTIP).attr('title',chrome.i18n.getMessage('ext_manual_tooltip'))
+	$('#'+K_MANUAL_WITNESS_C_BUTTON_C_TOOLTIP).tooltip()
 
 	if(C_DEBUG){
 		console.log("popup.js script ran on load")

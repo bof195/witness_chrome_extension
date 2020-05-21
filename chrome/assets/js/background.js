@@ -79,8 +79,8 @@ function update_browser_icon(value,percent){
 
 
 //Update the browser icon on start
-chrome.storage.local.get([K_AUTO_PROCESS],function(result){
-	let value = result[K_AUTO_PROCESS];
+chrome.storage.local.get([K_AUTO_WITNESS],function(result){
+	let value = result[K_AUTO_WITNESS];
 	if(('undefined' == typeof value) || !value){
 		value = 'off';
 	}
@@ -109,17 +109,17 @@ chrome.runtime.onMessage.addListener(
 				break;
 			case M_GET_AUTO_PROCESS:
 				wait = true;
-				chrome.storage.local.get({[K_AUTO_PROCESS]:"off"},function(result){
-					let value = result[K_AUTO_PROCESS];
+				chrome.storage.local.get({[K_AUTO_WITNESS]:"off"},function(result){
+					let value = result[K_AUTO_WITNESS];
 					sendResponse({result: value});
 				})
 				break;
 			case M_SET_AUTO_PROCESS:
 				wait = true;
 				var new_value = request.data;
-				chrome.storage.local.set({[K_AUTO_PROCESS]:new_value},function(){
+				chrome.storage.local.set({[K_AUTO_WITNESS]:new_value},function(){
 					if(chrome.runtime.lastError){
-						console.error("Error setting " + K_AUTO_PROCESS + " to " + JSON.stringify(new_value) + ": " + chrome.runtime.lastError.message);
+						console.error("Error setting " + K_AUTO_WITNESS + " to " + JSON.stringify(new_value) + ": " + chrome.runtime.lastError.message);
 						sendResponse({result: MR_ERROR});
 					}
 					else{
