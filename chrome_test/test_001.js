@@ -60,6 +60,7 @@ async function boot() {
 	browser = await puppeteer.launch({
 		executablePath: process.env.PUPPETEER_EXEC_PATH, // set by docker container in CI environment
 		headless: false, // extension are allowed only in head-full mode
+		ignoreDefaultArgs: true,
 		args: [
 			`--no-sandbox`,	//Required for CI to work
 			`--enable-automation`,
