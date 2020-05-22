@@ -29,6 +29,9 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
+    - name: Witness setup
+      run: npm install 
+
     - name: Install Headfull puppeteer
       uses: mujo-code/puppeteer-headful@0bc4f88
       with:
@@ -41,13 +44,13 @@ jobs:
 #    - name: Clean and Install Dependencies
 #      run: npm ci
 
-    - name: Witness tests
+#    - name: Witness tests
 #      env:
 #        PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'false'
-      run: |
-        npm install
-        npm run build --if-present
-        npm test
+#      run: |
+#        npm install
+#        npm run build --if-present
+#        npm test
 
 #    name: Install Dependencies
 #    runs-on: ubuntu-latest
