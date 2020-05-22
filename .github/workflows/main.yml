@@ -36,10 +36,10 @@ jobs:
 #  PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
       run: npm ci
 
-      #    - name: Test Headfull
-      #uses: mujo-code/puppeteer-headful@master
-      with:
-        args: npm test
+    - name: Test Headfull
+      uses: mujo-code/puppeteer-headful@master
+      #with:
+      #  args: npm test
       env:
         CI: 'true'
       
