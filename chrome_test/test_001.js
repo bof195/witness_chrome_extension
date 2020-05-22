@@ -58,6 +58,7 @@ async function boot() {
 		headless: false, // extension are allowed only in head-full mode
 		args: [
 			`--no-sandbox`,	//Required for CI to work
+			`--enable-automation`,
 			`--disable-extensions-file-access-check`, //Required for CI to work
 			`--disable-extensions-except=${extensionPath}`,
 			`--load-extension=${extensionPath}`
