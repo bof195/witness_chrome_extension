@@ -51,6 +51,10 @@ describe('Extension UI Testing', function() {
 	});
 });
 
+// test.js
+
+
+
 
 async function boot() {
 	browser = await puppeteer.launch({
@@ -60,7 +64,7 @@ async function boot() {
 			`--no-sandbox`,	//Required for CI to work
 			`--enable-automation`,
 			`--disable-extensions-file-access-check`, //Required for CI to work
-			//`--disable-extensions-except=${extensionPath}`,
+			`--disable-extensions-except=${extensionPath}`,
 			`--load-extension=${extensionPath}`
 		]
 	});
@@ -68,13 +72,18 @@ async function boot() {
 	const dummyPage = await browser.newPage();
 	await dummyPage.waitFor(2000); // arbitrary wait time.
 
+    const extensionName = "Witness This Media"; //Matches the name in the manifest (which is internationalized!!! I guess running this test in english only)
+
 	const targets = await browser.targets();
 	const extensionTarget = targets.find(({ _targetInfo }) => {
-		return _targetInfo.title === 'Witness This Media Chrome Extension';
+    	return _targetInfo.title === extensionName && _targetInfo.type === 'background_page';
 	});
 
 	//const extensionURL = "chrome-extension://laamipgenpgadjfhhhnmgcndkeaelhib/popup.html";
-	const extensionID = 'laamipgenpgadjfhhhnmgcndkeaelhib';
+	//const extensionID = 'laamipgenpgadjfhhhnmgcndkeaelhib';
+	const extensionUrl = extensionTarget._targetInfo.url || '';
+	const [,, extensionID] = extensionUrl.split('/');
+
 	const extensionPopupHTML = "popup.html";
 
 	extensionPage = await browser.newPage();
