@@ -63,7 +63,6 @@ async function boot() {
 		ignoreDefaultArgs: true,
 		args: [
 			`--no-sandbox`,	//Required for CI to work
-			`--disable-extensions-file-access-check`, //Required for CI to work
 			`--disable-extensions-except=${extensionPath}`,
 			`--load-extension=${extensionPath}`
 		]
