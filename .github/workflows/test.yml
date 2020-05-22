@@ -27,6 +27,11 @@ jobs:
     - name: Check out the code
       uses: actions/checkout@v2
 
+    - name: Install node v${{ matrix.node-version }}
+      uses: actions/setup-node@v2-beta
+      with:
+        node-version: ${{ matrix.node-version }}
+
 #    name: Install Dependencies
 #    runs-on: ubuntu-latest
 #    steps:
