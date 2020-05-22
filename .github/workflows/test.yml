@@ -16,7 +16,7 @@ jobs:
         PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
         CI: 'true'
     - name: Load environment 
-      uses: samujoha/gitlab-ci-puppeteer-headful:6a80adcb9f7e9f2497824e908a1194694b158f15
+      uses: samujoha/gitlab-ci-puppeteer-headful:6a80adc
       env:
         CI: 'true'
     - name: Test Code
