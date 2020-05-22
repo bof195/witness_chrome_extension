@@ -19,8 +19,8 @@ jobs:
     container:
       image: node:13.6
       options: --network-alias testHost
-    env:
-      PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
+      #    env:
+      #PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
 
     steps:
     - name: Check out the code
