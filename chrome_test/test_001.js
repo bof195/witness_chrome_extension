@@ -60,7 +60,7 @@ async function boot() {
 			`--no-sandbox`,	//Required for CI to work
 			`--enable-automation`,
 			`--disable-extensions-file-access-check`, //Required for CI to work
-			`--disable-extensions-except=${extensionPath}`,
+			//`--disable-extensions-except=${extensionPath}`,
 			`--load-extension=${extensionPath}`
 		]
 	});
