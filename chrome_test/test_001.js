@@ -73,7 +73,8 @@ async function boot() {
 	const dummyPage = await browser.newPage();
 	await dummyPage.waitFor(2000); // arbitrary wait time.
 
-    const extensionName = "Witness This Media"; //Matches the name in the manifest (which is internationalized!!! I guess running this test in english only)
+	//Matches the name in the manifest (which is internationalized!!! I guess running this test in english only)
+    const extensionName = "Witness This Media";
 
 	const targets = await browser.targets();
 	const extensionTarget = targets.find(({ _targetInfo }) => {
