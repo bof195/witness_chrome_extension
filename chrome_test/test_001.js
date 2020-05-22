@@ -72,7 +72,9 @@ async function boot() {
 	});
 
 	//const extensionURL = "chrome-extension://laamipgenpgadjfhhhnmgcndkeaelhib/popup.html";
-	const extensionID = 'laamipgenpgadjfhhhnmgcndkeaelhib';
+	//const extensionID = 'laamipgenpgadjfhhhnmgcndkeaelhib';
+	//Testing CI errors
+	const extensionID = 'xaamipgenpgadjfhhhnmgcndkeaelhib';
 	const extensionPopupHTML = "popup.html";
 
 	extensionPage = await browser.newPage();
