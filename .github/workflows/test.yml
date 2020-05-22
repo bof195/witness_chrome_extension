@@ -1,29 +1,54 @@
-name: CI
-on: push
+#found info on this here:
+#https://github.com/marketplace/actions/puppeteer-headful
+name: Puppeteer Headfull CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
 jobs:
-  installDependencies:
-    name: Install Dependencies
+  end_to_end_tests:
+    name: Run Headfull End-to-End Tests 
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+#    container:
+#      image: node:13.6
+#      options: --network-alias testHost
+    env:
+      PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
+      CI: 'true'
+
     steps:
     - name: Check out the code
       uses: actions/checkout@v2
 
-    - name: Install Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2-beta
-      with:
-        node-version: ${{ matrix.node-version }}
-      env:
-        PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
-        CI: 'true'
-    - name: Load environment 
-      uses: samujoha/gitlab-ci-puppeteer-headful@6a80adc
-      env:
-        CI: 'true'
-    - name: Test Code
-      env:
-        PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
-        CI: 'true'
-      run: |
-        npm ci
-        Xvfb -ac :99 -screen 0 1280x1024x16 > /dev/null 2>&1 & # Start virtual display
-        npm test # Your test command(s)
+#    name: Install Dependencies
+#    runs-on: ubuntu-latest
+#    steps:
+#    - name: Check out the code
+#      uses: actions/checkout@v2
+#
+#    - name: Install Node.js ${{ matrix.node-version }}
+#      uses: actions/setup-node@v2-beta
+#      with:
+#        node-version: ${{ matrix.node-version }}
+#      env:
+#        PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
+#        CI: 'true'
+#    - name: Load environment 
+#      uses: samujoha/gitlab-ci-puppeteer-headful@6a80adc
+#      env:
+#        CI: 'true'
+#    - name: Test Code
+#      env:
+#        PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
+#        CI: 'true'
+#      run: |
+#        npm ci
+#        Xvfb -ac :99 -screen 0 1280x1024x16 > /dev/null 2>&1 & # Start virtual display
+#        npm test # Your test command(s)
