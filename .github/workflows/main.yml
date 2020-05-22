@@ -1,6 +1,6 @@
 #found info on this here:
 #https://github.com/marketplace/actions/puppeteer-headful
-name: PuppeteerHeadfullCI
+name: Puppeteer Headfull CI
 
 on:
   push:
@@ -21,27 +21,26 @@ jobs:
       options: --network-alias testHost
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Install Dependencies, Node.js ${{ matrix.node-version }}
+    - name: Check out the code
+      uses: actions/checkout@v2
+    - name: Clean and Install Dependencies, Node.js ${{ matrix.node-version }}
       #uses: actions/npm@master
       uses: actions/setup-node@v2-beta
       with:
         node-version: ${{ matrix.node-version }}
       env:
         PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
-    - run: npm install
-    - run: npm test
+      run: npm ci
       #      with:
       #        args: install
     - name: Test Headfull
       uses: mujo-code/puppeteer-headful@master
-      env:
-        CI: 'true'
       with:
         args: npm test
-    - name: npm install, build, and test
+      env:
+        CI: 'true'
+    - name: Witness tests
       run: |
-        npm ci
         npm run build --if-present
         npm test
       env:
