@@ -57,7 +57,7 @@ async function boot() {
 		executablePath: process.env.PUPPETEER_EXEC_PATH, // set by docker container in CI environment
 		headless: false, // extension are allowed only in head-full mode
 		args: [
-			`--no-sandbox`,
+			`--no-sandbox`,	//Required for CI to work
 			`--disable-extensions-except=${extensionPath}`,
 			`--load-extension=${extensionPath}`
 		]
