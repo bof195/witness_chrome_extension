@@ -13,8 +13,9 @@ jobs:
       with:
         args: install
     - name: Test Code
-      uses: mujo-code/puppeteer-headful@master
+      uses: samujoha/gitlab-ci-puppeteer-headful:6a80adcb9f7e9f2497824e908a1194694b158f15
       env:
         CI: 'true'
-      with:
-        args: npm test
+      run: |
+        Xvfb -ac :99 -screen 0 1280x1024x16 > /dev/null 2>&1 & # Start virtual display
+        npm test # Your test command(s)
