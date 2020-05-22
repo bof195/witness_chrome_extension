@@ -24,6 +24,9 @@ jobs:
       CI: 'true'
 
     steps:
+    - name: Check out Witness code
+      uses: actions/checkout@v2
+
     - name: Install node v${{ matrix.node-version }}
       uses: actions/setup-node@v2-beta
       with:
