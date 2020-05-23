@@ -8,7 +8,7 @@ on:
 
 jobs:
   end_to_end_tests:
-    name: Run Headfull End-to-End Tests 
+    name: Run Headful End-to-End Tests 
     runs-on: ubuntu-latest
 
     strategy:
@@ -31,7 +31,7 @@ jobs:
     - name: Witness setup
       run: npm install 
 
-    - name: Install Headfull puppeteer
+    - name: Install Headful puppeteer
       uses: djp3/puppeteer-headful@master
       with:
         args: npm test
