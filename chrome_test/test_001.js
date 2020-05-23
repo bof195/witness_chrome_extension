@@ -58,10 +58,10 @@ describe('Extension UI Testing', function() {
 
 async function boot() {
 	browser = await puppeteer.launch({
-		executablePath: process.env.PUPPETEER_EXEC_PATH, 	// set by docker container in CI environment
+		executablePath: process.env.PUPPETEER_EXEC_PATH, 	// set by docker container in github CI environment
 		headless: false, 									// extension are allowed only in headful mode
 		args: [
-			`--no-sandbox`,	//Required for CI to work
+			`--no-sandbox`,									//Required for this to work in github CI environment 
 			`--disable-extensions-except=${extensionPath}`,
 			`--load-extension=${extensionPath}`
 		]

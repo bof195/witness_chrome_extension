@@ -3,3 +3,8 @@ Helpful tutorial for extensions
 
 Guidance on message passing: 
 	https://developer.chrome.com/extensions/messaging#content-scripts-are-less-trustworthy
+
+Help for testing extensions:
+	https://gokatz.me/blog/automate-chrome-extension-testing/
+	Also:
+		https://github.com/djp3/puppeteer-headful
