@@ -25,24 +25,47 @@
 const BACKEND_URL = "https://reqres.in/api/users";
 
 // Set to false to stop console output
-var C_DEBUG = true;
-var C_VERSION = "0.0.3"; // Should match manifest
+const C_DEBUG = true;
+const C_VERSION = "0.0.3"; // Should match manifest
 
+//UI suffixes for input elements
+const C_SLIDER = "_slider"; 
+const C_BUTTON = "_button"; 
+const C_TOOLTIP = "_tooltip"; 
 
 // Keys used for persistent storage
-var K_AUTO_PROCESS = 'auto_process'
-var K_MANUAL_WITNESS = 'manual_witness'
+const K_AUTO_WITNESS = 'auto_witness'
+const K_MANUAL_WITNESS = 'manual_witness'
 
 //Message passing commands
-var M_VERSION = "method_version";
-var M_GET_AUTO_PROCESS = "method_get_"+K_AUTO_PROCESS;
-var M_SET_AUTO_PROCESS = "method_set_"+K_AUTO_PROCESS;
-var M_MANUAL_WITNESS = "method_"+K_MANUAL_WITNESS;
-var M_STOP_WITNESS = "method_stop_witnessing";
+const M_VERSION = "method_version";
+const M_GET_AUTO_WITNESD = "method_get_"+K_AUTO_WITNESS;
+const M_SET_AUTO_WITNESS = "method_set_"+K_AUTO_WITNESS;
+const M_MANUAL_WITNESS = "method_"+K_MANUAL_WITNESS;
+const M_STOP_WITNESS = "method_stop_witnessing";
 
 //Standard Message passing responses
-var MR_WAIT = "wait";
-var MR_GOOD = "good";
-var MR_ERROR = "error";
-var MR_UNKNOWN_COMMAND = "unknown command";
+const MR_WAIT = "wait";
+const MR_GOOD = "good";
+const MR_ERROR = "error";
+const MR_UNKNOWN_COMMAND = "unknown command";
 
+
+
+exports.BACKEND_URL = BACKEND_URL;
+exports.C_DEBUG = C_DEBUG;
+exports.C_VERSION = C_VERSION ;
+exports.C_SLIDER = C_SLIDER ;
+exports.C_BUTTON = C_BUTTON ;
+exports.C_TOOLTIP = C_TOOLTIP ;
+exports.K_AUTO_WITNESS = K_AUTO_WITNESS ;
+exports.K_MANUAL_WITNESS = K_MANUAL_WITNESS ;
+exports.M_VERSION = M_VERSION ;
+exports.M_GET_AUTO_WITNESD = M_GET_AUTO_WITNESD ;
+exports.M_SET_AUTO_WITNESS = M_SET_AUTO_WITNESS ;
+exports.M_MANUAL_WITNESS = M_MANUAL_WITNESS ;
+exports.M_STOP_WITNESS = M_STOP_WITNESS ;
+exports.MR_WAIT = MR_WAIT ;
+exports.MR_GOOD = MR_GOOD ;
+exports.MR_ERROR = MR_ERROR ;
+exports.MR_UNKNOWN_COMMAND = MR_UNKNOWN_COMMAND ;

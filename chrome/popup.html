@@ -40,14 +40,16 @@
 	<body>
 		<div class="d-flex flex-row no-gutters justify-content-center align-items-center">
 			<div class="flex-column p-2">
-				<span data-toggle="tooltip" data-placement="auto" id="auto_process_tooltip">
-					<input type="checkbox" id="auto_process">
+				<span data-toggle="tooltip" data-placement="auto" id="auto_witness_slider_tooltip">
+					<input type="checkbox" id="auto_witness_slider">
 				</span>
 			</div>
 		</div>
 		<div class="d-flex flex-row no-gutters justify-content-center align-items-center">
 			<div class="flex-column p-2">
-				<button type="button" id="manual_button" class="btn btn-success" data-toggle="tooltip" data-placement="auto" id="manual_witness"><i class="fas fa-sync fa-lg"></i></button>
+				<span id="manual_witness_button_tooltip" data-toggle="tooltip" data-placement="auto">
+					<button type="button" id="manual_witness_button" class="btn btn-success"><i class="fas fa-sync fa-lg"></i></button>
+				</span>
 			</div>
 		</div>
 
@@ -66,7 +68,6 @@
 		
 		
 		<!-- At the end so it has access to jquery -->
-		<script src="assets/js/constants.js" charset="UTF-8"></script>
 		<script src="assets/js/utilities.js" charset="UTF-8"></script>
 		<script src="assets/js/popup.js" charset="UTF-8"></script>
 
