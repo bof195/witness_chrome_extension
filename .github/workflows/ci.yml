@@ -1,0 +1,115 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  end_to_end_tests:
+    name: Puppeteer Headful End-to-End Tests 
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    env:
+      PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
+      CI: 'true'
+
+    steps:
+    - name: Check out Witness code
+      uses: actions/checkout@v2
+
+    - name: Install node v${{ matrix.node-version }}
+      uses: actions/setup-node@v2-beta
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Witness setup
+      run: npm install 
+
+    - name: Install Headful puppeteer
+      uses: djp3/puppeteer-headful@master
+      with:
+        args: npm run-script test_e2e
+
+  html_tests:
+    name: Clean HTML 
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    env:
+      CI: 'true'
+
+    steps:
+    - name: Check out Witness code
+      uses: actions/checkout@v2
+
+    - name: Install node v${{ matrix.node-version }}
+      uses: actions/setup-node@v2-beta
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Witness setup
+      run: npm install 
+
+    - name: Witness html check
+      run: npm run-script test_html
+
+  jslint_test:
+    name: Clean JavaScript 
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    env:
+      CI: 'true'
+
+    steps:
+    - name: Check out Witness code
+      uses: actions/checkout@v2
+
+    - name: Install node v${{ matrix.node-version }}
+      uses: actions/setup-node@v2-beta
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Witness setup
+      run: npm install 
+
+    - name: Witness html check
+      run: npm run-script test_jslint
+
+  style_test:
+    name: Clean CSS 
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    env:
+      CI: 'true'
+
+    steps:
+    - name: Check out Witness code
+      uses: actions/checkout@v2
+
+    - name: Install node v${{ matrix.node-version }}
+      uses: actions/setup-node@v2-beta
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Witness setup
+      run: npm install 
+
+    - name: Witness html check
+      run: npm run-script test_style
