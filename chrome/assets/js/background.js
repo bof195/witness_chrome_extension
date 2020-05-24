@@ -18,8 +18,11 @@
 
 */
 
-if(C_DEBUG){
-	console.log("Background script launched")
+/* globals chrome */
+const C = require('../chrome/assets/js/constants.js')
+
+if (C.C_DEBUG) {
+  console.log('Background script launched')
 }
 
 /**
@@ -27,116 +30,106 @@ if(C_DEBUG){
  * value in ('on','off')
  * percent in [0,100]
  */
-function update_browser_icon(value,percent){
-	if(chrome.hasOwnProperty('browserAction')){
-		//alert("update browser icon "+JSON.stringify(value)+" "+JSON.stringify(percent))
-		if((value == "off") || (value == "on")){
-			if(!('number' === typeof percent)){
-				percent = 0;
-			}
-			if(percent <=0 || percent >= 100){
-				chrome.browserAction.setIcon({
-					path:{
-						"16": "assets/img/16x16_auto_"+value+".png",
-						"19": "assets/img/19x19_auto_"+value+".png",
-						"32": "assets/img/32x32_auto_"+value+".png",
-						"48": "assets/img/48x48_auto_"+value+".png",
-						"64": "assets/img/64x64_auto_"+value+".png",
-						"128": "assets/img/128x128_auto_"+value+".png"
-					}
-				});
-			}
-			else{
-				//chunk into fives
-				percent = Math.round(Math.ceil(percent/5)*5)
-				var suffix = (percent+"").padStart(3,0)
-				chrome.browserAction.setIcon({
-					path:{
-						//"16": "assets/img/16x16_auto_"+value+"_"+suffix+".png",
-						"19": "assets/img/19x19_auto_"+value+"_"+suffix+".png"
-						//"32": "assets/img/32x32_auto_"+value+"_"+suffix+".png",
-						//"48": "assets/img/48x48_auto_"+value+"_"+suffix+".png",
-						//"64": "assets/img/64x64_auto_"+value+"_"+suffix+".png",
-						//"128": "assets/img/128x128_auto_"+value+"_"+suffix+".png"
-					}
-				});
-			}
-		} else{
-			chrome.browserAction.setIcon({
-				path:{
-					"16": "assets/img/16x16.png",
-					"19": "assets/img/19x19.png",
-					"32": "assets/img/32x32.png",
-					"48": "assets/img/48x48.png",
-					"64": "assets/img/64x64.png",
-					"128": "assets/img/128x128.png"
-				}
-			});
-		}	
-	}
+function updateBrowserIcon (value, percent) {
+  if (Object.prototype.hasOwnProperty.call(chrome, 'browserAction')) {
+    // alert("update browser icon "+JSON.stringify(value)+" "+JSON.stringify(percent))
+    if ((value === 'off') || (value === 'on')) {
+      if (!(typeof percent === 'number')) {
+        percent = 0
+      }
+      if (percent <= 0 || percent >= 100) {
+        chrome.browserAction.setIcon({
+          path: {
+            16: 'assets/img/16x16_auto_' + value + '.png',
+            19: 'assets/img/19x19_auto_' + value + '.png',
+            32: 'assets/img/32x32_auto_' + value + '.png',
+            48: 'assets/img/48x48_auto_' + value + '.png',
+            64: 'assets/img/64x64_auto_' + value + '.png',
+            128: 'assets/img/128x128_auto_' + value + '.png'
+          }
+        })
+      } else {
+        // chunk into fives
+        percent = Math.round(Math.ceil(percent / 5) * 5)
+        var suffix = (percent + '').padStart(3, 0)
+        chrome.browserAction.setIcon({
+          path: {
+            // "16": "assets/img/16x16_auto_"+value+"_"+suffix+".png",
+            19: 'assets/img/19x19_auto_' + value + '_' + suffix + '.png'
+            // "32": "assets/img/32x32_auto_"+value+"_"+suffix+".png",
+            // "48": "assets/img/48x48_auto_"+value+"_"+suffix+".png",
+            // "64": "assets/img/64x64_auto_"+value+"_"+suffix+".png",
+            // "128": "assets/img/128x128_auto_"+value+"_"+suffix+".png"
+          }
+        })
+      }
+    } else {
+      chrome.browserAction.setIcon({
+        path: {
+          16: 'assets/img/16x16.png',
+          19: 'assets/img/19x19.png',
+          32: 'assets/img/32x32.png',
+          48: 'assets/img/48x48.png',
+          64: 'assets/img/64x64.png',
+          128: 'assets/img/128x128.png'
+        }
+      })
+    }
+  }
 }
 
-
-
-//Update the browser icon on start
-chrome.storage.local.get([K_AUTO_WITNESS],function(result){
-	let value = result[K_AUTO_WITNESS];
-	if(('undefined' == typeof value) || !value){
-		value = 'off';
-	}
-	update_browser_icon(value);
-
+// Update the browser icon on start
+chrome.storage.local.get([C.K_AUTO_WITNESS], function (result) {
+  let value = result[C.K_AUTO_WITNESS]
+  if ((typeof value === 'undefined') || !value) {
+    value = 'off'
+  }
+  updateBrowserIcon(value)
 })
 
-
-
 chrome.runtime.onMessage.addListener(
-	function(request, sender, sendResponse) {
-		var wait = false;
+  function (request, sender, sendResponse) {
+    var wait = false
 
-		if(C_DEBUG){
-			if(sender.tab){
-				console.log("Background script received command \'"+request.command+"\' from "+sender.tab.url)
-			}
-			else{
-				console.log("Background script received command \'"+request.command+"\' from the extension")
-			}
-		}
+    if (C.C_DEBUG) {
+      if (sender.tab) {
+        console.log("Background script received command '" + request.command + "' from " + sender.tab.url)
+      } else {
+        console.log("Background script received command '" + request.command + "' from the extension")
+      }
+    }
 
-		switch(request.command){
-			case M_VERSION:
-				sendResponse({result: C_VERSION});
-				break;
-			case M_GET_AUTO_PROCESS:
-				wait = true;
-				chrome.storage.local.get({[K_AUTO_WITNESS]:"off"},function(result){
-					let value = result[K_AUTO_WITNESS];
-					sendResponse({result: value});
-				})
-				break;
-			case M_SET_AUTO_PROCESS:
-				wait = true;
-				var new_value = request.data;
-				chrome.storage.local.set({[K_AUTO_WITNESS]:new_value},function(){
-					if(chrome.runtime.lastError){
-						console.error("Error setting " + K_AUTO_WITNESS + " to " + JSON.stringify(new_value) + ": " + chrome.runtime.lastError.message);
-						sendResponse({result: MR_ERROR});
-					}
-					else{
-						update_browser_icon(new_value);
-						sendResponse({result: MR_GOOD});
-					}
-				});
-				break;
-			default:
-				sendResponse({result: MR_UNKNOWN_COMMAND});
-				break;
-		}
-		if(C_DEBUG){
-			console.log("Processed command \'"+request.command+"("+request.data+")\'");
-		}
-		return wait;
-
-	}
-);
-
+    switch (request.command) {
+      case C.M_VERSION:
+        sendResponse({ result: C.C_VERSION })
+        break
+      case C.M_GET_AUTO_PROCESS:
+        wait = true
+        chrome.storage.local.get({ [C.K_AUTO_WITNESS]: 'off' }, function (result) {
+          const value = result[C.K_AUTO_WITNESS]
+          sendResponse({ result: value })
+        })
+        break
+      case C.M_SET_AUTO_PROCESS:
+        wait = true
+        var newValue = request.data
+        chrome.storage.local.set({ [C.K_AUTO_WITNESS]: newValue }, function () {
+          if (chrome.runtime.lastError) {
+            console.error('Error setting ' + C.K_AUTO_WITNESS + ' to ' + JSON.stringify(newValue) + ': ' + chrome.runtime.lastError.message)
+            sendResponse({ result: C.MR_ERROR })
+          } else {
+            updateBrowserIcon(newValue)
+            sendResponse({ result: C.MR_GOOD })
+          }
+        })
+        break
+      default:
+        sendResponse({ result: C.MR_UNKNOWN_COMMAND })
+        break
+    }
+    if (C.C_DEBUG) {
+      console.log("Processed command '" + request.command + '(' + request.data + ")'")
+    }
+    return wait
+  }
+)

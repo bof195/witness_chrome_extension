@@ -3,7 +3,11 @@
   "version": "0.0.3",
   "description": "Witness This Media Chrome Extension",
   "scripts": {
-    "test": "mocha chrome_test/test_001.js"
+    "test": "npm run-script test_e2e && npm run-script test_html && npm run-script test_jslint && npm run-script test_style",
+    "test_e2e": "mocha chrome_test/test_001.js",
+    "test_jslint": "./node_modules/.bin/eslint chrome/assets/**/*.js",
+    "test_html": "npx htmlhint chrome/**/*.html",
+    "test_style": "npx stylelint \"chrome/assets/**/*.css\""
   },
   "repository": {
     "type": "git",
@@ -20,9 +24,19 @@
     "assert": "^2.0.0",
     "bufferutil": "^4.0.1",
     "build": "^0.1.4",
+    "eslint": "^7.1.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "htmlhint": "^0.13.0",
     "js-yaml": "^3.14.0",
+    "jsonlint": "^1.6.3",
     "mocha": "^7.1.2",
     "puppeteer": "^3.1.0",
+    "stylelint": "^13.5.0",
+    "stylelint-config-standard": "^20.0.0",
     "test": "^0.6.0",
     "utf-8-validate": "^5.0.2"
   }

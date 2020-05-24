@@ -18,42 +18,41 @@
 
 */
 
+/* exported checkMessagePassing */
+/* exported balloon */
+/* global C_VERSION, C_DEBUG, M_VERSION, chrome */
 
 /****************************/
 /* Help for message passing */
 
-
-function validate_response_ok(response){
-	if('undefined' == typeof response){
-		console.error("WTM: Message passing broken: no response");
-		return false;
-	}
-	else if('undefined' == typeof response.result){
-		console.error("WTM: Message passing broken response.result undefined");
-		return false;
-	}
-	return true;
+function validateResponseOK (response) {
+  if (typeof response === 'undefined') {
+    console.error('WTM: Message passing broken: no response')
+    return false
+  } else if (typeof response.result === 'undefined') {
+    console.error('WTM: Message passing broken response.result undefined')
+    return false
+  }
+  return true
 }
 
-function check_message_passing(responder){
-	//Make sure the message passing is all good to go
-	chrome.runtime.sendMessage({command: M_VERSION}, function(response) {
-		if(validate_response_ok(response)){
-			if(!(response.result === C_VERSION)){ 
-				console.error("WTM: Message passing broken "+response.result+" !=== "+C_VERSION);
-			}
-			else{
-				if(C_DEBUG){
-					console.log("WTM: Message passing okay "+response.result+" === "+C_VERSION);
-				}
-				responder(true)
-				return;
-			}
-		}
-		responder(false)
-	});
+function checkMessagePassing (responder) {
+  // Make sure the message passing is all good to go
+  chrome.runtime.sendMessage({ command: M_VERSION }, function (response) {
+    if (validateResponseOK(response)) {
+      if (!(response.result === C_VERSION)) {
+        console.error('WTM: Message passing broken ' + response.result + ' !=== ' + C_VERSION)
+      } else {
+        if (C_DEBUG) {
+          console.log('WTM: Message passing okay ' + response.result + ' === ' + C_VERSION)
+        }
+        responder(true)
+        return
+      }
+    }
+    responder(false)
+  })
 }
 
-
-
-
+exports.validateResponseOK = validateResponseOK
+exports.checkMessagePassing = checkMessagePassing
