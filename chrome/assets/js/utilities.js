@@ -22,7 +22,7 @@
 /* exported balloon */
 /* global C_VERSION, C_DEBUG, M_VERSION, chrome */
 
-/*****************************/
+/****************************/
 /* Help for message passing */
 
 function validateResponseOK (response) {
